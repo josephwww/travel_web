@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+  <title>HELLO，AMAP!</title>
+  <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+  <style>
+    html,
+    body,
+    #container {
+      height: 100%;
+      width: 100%;
+    }
+
+    .amap-icon img,
+    .amap-marker-content img {
+      width: 25px;
+      height: 34px;
+    }
+
+    .cus_info_window {
+      background-color: #fff;
+      padding: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="container"></div>
+  <script type="text/javascript">
+    window._AMapSecurityConfig = {
+      securityJsCode: "b606565e572165ec004b3795ad79998e",
+    };
+  </script>
+  <script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=4cddce47663344353f6e349d715070a7"></script>
+  <script type="text/javascript">
+
+    var map = new AMap.Map("container", {
+      viewMode: "2D", 
+      zoom: 11,
+      center: [114.0596, 22.5429],
+      resizeEnable: true,
+    });
+
+
+    AMap.plugin("AMap.Driving", function () {
+      var driving = new AMap.Driving({
+        //驾车路线规划策略，0是速度优先的策略
+        policy: 0, 
+        map: map,
+      });
+      var points = [
+        { keyword: "翡翠海岸", city: "深圳" }, 
+        { keyword: "泊寓坪山燕子岭店", city: "深圳" }, 
+        { keyword: "珠江新城", city: "广州" }, 
+      ];
+      driving.search(points);
+    });
+
+    
+  </script>
+</body>
+
+</html>

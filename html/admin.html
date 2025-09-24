@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>重庆旅行计划 - Admin Panel</title>
+    <link rel="stylesheet" href="styles.css?v=20250922007">
+</head>
+<body>
+    <div class="container admin-container">
+        <header>
+            <h1>📋 重庆旅行计划管理</h1>
+            <p>编辑和管理您的重庆之旅</p>
+        </header>
+
+        <nav class="admin-nav">
+            <button class="nav-btn active" onclick="showSection('basic-info', this)">基础信息</button>
+            <button class="nav-btn" onclick="showSection('transportations', this)">交通信息</button>
+            <button class="nav-btn" onclick="showSection('accommodations', this)">住宿信息</button>
+            <button class="nav-btn" onclick="showSection('itinerary', this)">行程安排</button>
+            <button class="nav-btn" onclick="showSection('budget', this)">预算管理</button>
+            <button class="nav-btn" onclick="showSection('checklist', this)">必备清单</button>
+            <button class="nav-btn" onclick="showSection('notes', this)">备注说明</button>
+            <a href="index.html" class="back-link">← 返回展示页</a>
+        </nav>
+
+        <section id="basic-info" class="admin-section active">
+            <h2>👥 基础信息</h2>
+
+            <div class="basic-info-management">
+                <div class="travelers-section">
+                    <h3>旅行者</h3>
+                    <div id="travelers-list" class="travelers-list">
+                        <!-- 动态加载旅行者 -->
+                    </div>
+                    <div class="add-traveler-section">
+                        <input type="text" id="new-traveler-name" placeholder="添加新旅行者" title="输入旅行者姓名">
+                        <button class="add-btn" onclick="addTraveler()" title="添加新的旅行伙伴">+ 添加旅行者</button>
+                    </div>
+                </div>
+
+                <div class="travel-dates-section">
+                    <h3>旅行时间</h3>
+                    <div class="form-row">
+                        <label>出发地:</label>
+                        <input type="text" id="travel-origin" placeholder="出发地" title="输入旅行出发城市">
+                    </div>
+                    <div class="form-row">
+                        <label>目的地:</label>
+                        <input type="text" id="travel-destination" placeholder="目的地" title="输入旅行目的地城市">
+                    </div>
+                    <div class="form-row">
+                        <label>开始日期:</label>
+                        <input type="date" id="travel-start-date" title="选择旅行开始日期">
+                    </div>
+                    <div class="form-row">
+                        <label>结束日期:</label>
+                        <input type="date" id="travel-end-date" title="选择旅行结束日期">
+                    </div>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveBasicInfo()">保存基础信息</button>
+        </section>
+
+        <section id="transportations" class="admin-section">
+            <h2>🚄 交通信息</h2>
+
+            <div class="transportation-management">
+                <div id="transportation-list" class="transportation-list">
+                    <!-- 动态加载交通信息 -->
+                </div>
+
+                <div class="add-transportation-section">
+                    <h3>添加新交通</h3>
+                    <div class="transportation-form">
+                        <select id="new-transport-type">
+                            <option value="flight">✈️ 航班</option>
+                            <option value="train">🚄 高铁/火车</option>
+                            <option value="bus">🚌 汽车</option>
+                            <option value="other">🚗 其他</option>
+                        </select>
+                        <input type="text" id="new-transport-name" placeholder="交通段名称 (如: 去程航班)" title="输入交通方式名称用于识别">
+                        <button class="add-btn" onclick="addNewTransportation()" title="添加新的交通工具">+ 添加交通</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveTransportations()">保存交通信息</button>
+        </section>
+
+        <section id="accommodations" class="admin-section">
+            <h2>🏨 住宿信息</h2>
+
+            <div class="accommodation-management">
+                <div id="accommodation-list" class="accommodation-list">
+                    <!-- 动态加载住宿信息 -->
+                </div>
+
+                <div class="add-accommodation-section">
+                    <h3>添加新住宿</h3>
+                    <div class="accommodation-form">
+                        <input type="text" id="new-accommodation-name" placeholder="住宿名称" title="输入酒店或民宿名称">
+                        <button class="add-btn" onclick="addNewAccommodation()" title="添加新的住宿地点">+ 添加住宿</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveAccommodations()">保存住宿信息</button>
+        </section>
+
+        <section id="itinerary" class="admin-section">
+            <h2>📅 行程安排</h2>
+
+            <div id="itinerary-list">
+                <!-- 动态加载行程安排 -->
+            </div>
+
+            <button class="save-btn" onclick="saveItinerary()">保存行程安排</button>
+        </section>
+
+        <section id="budget" class="admin-section">
+            <h2>💰 预算管理</h2>
+
+            <div class="budget-summary">
+                <div class="summary-cards">
+                    <div class="summary-card total-budget">
+                        <h3>总预算 <button class="edit-total-budget-btn" onclick="showEditTotalBudgetModal()">✏️</button></h3>
+                        <div class="amount" id="total-budget-amount">¥5000</div>
+                    </div>
+                    <div class="summary-card planned-budget">
+                        <h3>已计划</h3>
+                        <div class="amount" id="planned-budget-amount">¥4160</div>
+                    </div>
+                    <div class="summary-card spent-budget">
+                        <h3>已花费</h3>
+                        <div class="amount" id="spent-budget-amount">¥0</div>
+                    </div>
+                    <div class="summary-card remaining-budget">
+                        <h3>剩余预算</h3>
+                        <div class="amount" id="remaining-budget-amount">¥840</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="budget-charts">
+                <div class="chart-container">
+                    <h3>按类别分析</h3>
+                    <div id="category-chart" class="chart-placeholder">
+                        <!-- 类别统计图表 -->
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <h3>按付款人分析</h3>
+                    <div id="payer-chart" class="chart-placeholder">
+                        <!-- 付款人统计图表 -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="expense-management">
+                <h3>支出列表</h3>
+                <div class="expense-controls">
+                    <button class="add-btn" onclick="showAddExpenseForm()">+ 添加支出</button>
+                    <select id="filter-category" onchange="filterExpenses()">
+                        <option value="">所有类别</option>
+                        <option value="transportation">交通</option>
+                        <option value="accommodation">住宿</option>
+                        <option value="food">餐饮</option>
+                        <option value="attractions">景点</option>
+                        <option value="visa">签证</option>
+                        <option value="shopping">购物</option>
+                        <option value="miscellaneous">其他</option>
+                    </select>
+                    <select id="filter-status" onchange="filterExpenses()">
+                        <option value="">所有状态</option>
+                        <option value="planned">计划中</option>
+                        <option value="completed">已完成</option>
+                    </select>
+                </div>
+
+                <div id="expense-list" class="expense-list">
+                    <!-- 动态加载支出列表 -->
+                </div>
+
+                <div id="add-expense-form" class="expense-form" style="display: none;">
+                    <h4>添加新支出</h4>
+                    <div class="form-row">
+                        <label>支出标题:</label>
+                        <input type="text" id="expense-title" placeholder="支出标题" title="输入支出项目名称">
+                    </div>
+                    <div class="form-row">
+                        <label>金额:</label>
+                        <input type="number" id="expense-amount" placeholder="金额" min="0" step="0.01" title="输入支出金额">
+                    </div>
+                    <div class="form-row">
+                        <label>类别:</label>
+                        <select id="expense-category">
+                            <option value="transportation">🚄 交通</option>
+                            <option value="accommodation">🏨 住宿</option>
+                            <option value="food">🍽️ 餐饮</option>
+                            <option value="attractions">🎫 景点</option>
+                            <option value="visa">📝 签证</option>
+                            <option value="shopping">🛍️ 购物</option>
+                            <option value="miscellaneous">💰 其他</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>付款人:</label>
+                        <select id="expense-payer">
+                            <option value="小鸡毛">小鸡毛</option>
+                            <option value="小白毛">小白毛</option>
+                            <option value="AA制">AA制</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <label>日期:</label>
+                        <input type="date" id="expense-date" title="选择支出日期">
+                    </div>
+                    <div class="form-row">
+                        <label>描述:</label>
+                        <textarea id="expense-description" placeholder="支出描述" rows="3" title="输入支出的详细描述"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label>关联项目:</label>
+                        <select id="expense-related">
+                            <option value="">无关联</option>
+                            <!-- 动态加载交通和住宿选项 -->
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button class="save-btn" onclick="saveExpense()">保存支出</button>
+                        <button class="cancel-btn" onclick="hideAddExpenseForm()">取消</button>
+                    </div>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveBudget()">保存预算信息</button>
+        </section>
+
+        <section id="checklist" class="admin-section">
+            <h2>📋 必备清单</h2>
+
+            <div class="checklist-management">
+                <div class="checklist-categories">
+                    <h3>按类别管理</h3>
+                    <div id="checklist-categories-tabs" class="category-tabs">
+                        <!-- 动态加载类别标签 -->
+                    </div>
+                </div>
+
+                <div class="checklist-items">
+                    <div id="checklist-items-list" class="checklist-items-list">
+                        <!-- 动态加载清单项目 -->
+                    </div>
+                </div>
+
+                <div class="add-checklist-item-section">
+                    <h3>添加新项目</h3>
+                    <div class="checklist-form">
+                        <div class="form-row">
+                            <select id="new-item-category">
+                                <option value="documents">📄 证件类</option>
+                                <option value="electronics">🔌 电子设备</option>
+                                <option value="clothing">👕 服装类</option>
+                                <option value="personal_care">🧴 个人护理</option>
+                                <option value="medicine">💊 药品</option>
+                                <option value="other">📦 其他</option>
+                            </select>
+                            <input type="text" id="new-item-name" placeholder="项目名称" title="输入必备物品名称">
+                        </div>
+                        <div class="form-row">
+                            <input type="text" id="new-item-description" placeholder="描述信息（可选）" title="输入项目详细描述">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="new-item-required" checked>
+                                <span>必需物品</span>
+                            </label>
+                        </div>
+                        <button class="add-btn" onclick="addChecklistItem()" title="添加新的必备物品">+ 添加项目</button>
+                    </div>
+                </div>
+
+                <div class="traveler-confirmation-section">
+                    <h3>旅行者确认状态</h3>
+                    <div id="confirmation-overview" class="confirmation-overview">
+                        <!-- 动态显示确认状态 -->
+                    </div>
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveChecklist()">保存必备清单</button>
+        </section>
+
+        <section id="notes" class="admin-section">
+            <h2>📝 备注说明</h2>
+
+            <div class="highlights-section">
+                <h3>旅行亮点</h3>
+                <div id="highlights-list" class="editable-list">
+                    <!-- 动态加载旅行亮点 -->
+                </div>
+                <button class="add-btn" onclick="addHighlight()">+ 添加亮点</button>
+            </div>
+
+
+            <div class="notes-section">
+                <h3>旅行提醒</h3>
+                <textarea id="travel-notes" rows="6" cols="50" placeholder="在此添加旅行备注、提醒事项等..." title="输入需要携带的物品、注意事项等"></textarea>
+            </div>
+
+            <div class="emergency-contacts">
+                <h3>紧急联系人</h3>
+                <input type="text" placeholder="联系人姓名" id="contact-name" title="输入紧急联系人姓名">
+                <input type="text" placeholder="电话号码" id="contact-phone" title="输入联系人电话号码">
+                <button class="add-contact-btn" onclick="addContact()" title="添加紧急联系人">添加联系人</button>
+                
+                <div class="contact-list" id="contact-list">
+                </div>
+            </div>
+
+            <button class="save-btn" onclick="saveNotes()">保存备注信息</button>
+        </section>
+
+        <div class="admin-actions">
+            <button class="export-btn" onclick="exportPlan()">📤 导出计划</button>
+            <button class="print-btn" onclick="printPlan()">🖨️ 打印计划</button>
+            <button class="reset-btn" onclick="resetPlan()">🔄 重置计划</button>
+        </div>
+    </div>
+
+    <!-- 总预算编辑模态框 -->
+    <div id="total-budget-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>编辑总预算</h3>
+                <button class="modal-close" onclick="hideEditTotalBudgetModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <label for="modal-total-budget" id="budget-amount-label">总预算金额（¥）:</label>
+                    <input type="number" id="modal-total-budget" min="0" step="0.01" placeholder="请输入总预算">
+                </div>
+                <div class="form-row">
+                    <label for="modal-budget-currency">货币:</label>
+                    <select id="modal-budget-currency">
+                        <option value="CNY">人民币 (CNY)</option>
+                        <option value="USD">美元 (USD)</option>
+                        <option value="EUR">欧元 (EUR)</option>
+                        <option value="GBP">英镑 (GBP)</option>
+                        <option value="JPY">日元 (JPY)</option>
+                    </select>
+                </div>
+                <div class="budget-tip">
+                    <p>💡 建议设置比预期花费高10-20%的预算，以应对意外支出。</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button class="save-btn" onclick="saveTotalBudget()">保存</button>
+                <button class="cancel-btn" onclick="hideEditTotalBudgetModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框背景遮罩 -->
+    <div id="modal-overlay" class="modal-overlay" style="display: none;" onclick="hideEditTotalBudgetModal()"></div>
+
+    <script src="admin.js?v=20250922006"></script>
+</body>
+</html>

@@ -1,0 +1,455 @@
+{
+  "travelInfo": {
+    "destination": "重庆",
+    "origin": "深圳",
+    "travelers": [
+      "小鸡毛",
+      "小白毛"
+    ],
+    "startDate": "2025-10-03",
+    "endDate": "2025-10-08"
+  },
+  "transportations": {
+    "去程航班": {
+      "type": "flight",
+      "number": "MF8304",
+      "route": "深圳宝安T3 → 重庆江北T3",
+      "date": "10月3日",
+      "departureTime": "11:50",
+      "arrivalTime": "14:05",
+      "duration": "2小时15分钟",
+      "description": "厦门航空"
+    },
+    "回程航班": {
+      "type": "flight",
+      "number": "HU7342",
+      "route": "重庆江北T3 → 广州白云T1",
+      "date": "10月7日",
+      "departureTime": "09:30",
+      "arrivalTime": "11:20",
+      "duration": "1小时50分钟",
+      "description": "海南航空"
+    },
+    "去程高铁": {
+      "type": "train",
+      "number": "S5542",
+      "route": "重庆北 → 奉节",
+      "date": "10月3日",
+      "departureTime": "17:05",
+      "arrivalTime": "18:49",
+      "duration": "1小时44分钟",
+      "description": "检票口12A,13A      座位06车05A、B号"
+    },
+    "租车": {
+      "type": "bus",
+      "number": "丰田新卡罗拉",
+      "route": "奉节高铁时代城便捷点 → 重庆江北机场T3店",
+      "date": "10月4日-10月7日",
+      "departureTime": "08:30",
+      "arrivalTime": "08:30",
+      "duration": "3天",
+      "description": "奉节高铁站"
+    }
+  },
+  "itinerary": {
+    "day1": {
+      "date": "10月3日 (周五)",
+      "location": "深圳 → 重庆 → 奉节",
+      "weather_poi": "440306,500105,500236",
+      "type": "departure",
+      "activities": [
+        "前往酒店办理入住3.4km,8min，建议打的士",
+        "7:30 晚饭：双姐老火锅（距离酒店15min）/小酌一杯/壹盬子鸡（要提前订）"
+      ]
+    },
+    "day2": {
+      "date": "10月4日 (周六)",
+      "location": "奉节 → 万州",
+      "weather_poi": "500236,500101",
+      "type": "adventure",
+      "activities": [
+        "9:00- 10:00 酒店用早餐，9点前往高铁站拿车出发，前往三峡之巅蓝月河停车场（距离酒店1h）",
+        "10.00-13.00  乘坐观光车往返三峡之巅（提前平台买门票+观光车票）",
+        "13:00-14:30  开车前往拗口观景台，午餐在附近的蔡支书农家乐",
+        "14.30-17:00 （从农家乐到白帝城19min）到达白帝城景区 / 不去白帝城就去宝塔坪坐船深度游瞿塘峡",
+        "17:00 启程前往万州亚朵酒店，约2个小时",
+        "19:00 到达酒店办理入住",
+        "19:20 前往万州天生城，晚饭在附近的小舅母子烤鱼（提前约）/十三位小酒馆/高粱大格格，"
+      ]
+    },
+    "day3": {
+      "date": "10月5日 (周日)",
+      "location": "万州 →涪陵",
+      "weather_poi": "500101,500102",
+      "type": "return",
+      "activities": [
+        "🌅 早餐后万州城区citywalk（走路/共享电单车，不开车），随意走走",
+        "参考路线：南滨公园-三峡移民纪念馆-万州长江二桥-大桥溪音乐广场-石琴路-吃吃吃-（海托大厦公交站）网红大楼梯 -万州港 - 万达广场 -  西山公园 - 亚朵酒店",
+        "推荐美食：冉凉面、耿格格、鸽子沟臭豆腐、吊桷楼米线、小平小火锅",
+        "下午：万州大瀑布，出发去忠县吃晚餐",
+        "前往涪陵2h，入住"
+      ]
+    },
+    "day4": {
+      "date": "10月6日 (周一)",
+      "location": "涪陵 → 重庆",
+      "weather_poi": "500102,500108",
+      "type": "explore",
+      "activities": [
+        "🏮 洪崖洞夜景",
+        "🍲 品尝重庆火锅",
+        "🚠 长江索道体验",
+        "💕 解放碑步行街购物"
+      ]
+    },
+    "day5": {
+      "date": "10月7日 (周二)",
+      "location": "重庆 → 广州",
+      "type": "departure",
+      "weather_poi": "500105,440111",
+      "activities": [
+        "🛫 从重庆江北机场返程",
+        "💫 美好旅程结束",
+        "💒 参加婚礼"
+      ]
+    },
+    "day6": {
+      "date": "10月8日 (周三)",
+      "location": "广州 → 深圳",
+      "type": "return",
+      "activities": [
+        "🏠 从广州返程"
+      ]
+    }
+  },
+  "accommodations": {
+    "奉节住宿": {
+      "name": "奉节住宿",
+      "location": "奉节诗城皇廷大酒店",
+      "checkIn": "10月3日",
+      "checkOut": "10月4日",
+      "contact": "",
+      "address": "奉节夔州街道诗城西路1991号",
+      "description": "高级江景大床房（慕斯床垫+浴缸）"
+    },
+    "万州住宿": {
+      "name": "万州住宿",
+      "location": "重庆万州万达北滨大道亚朵酒店",
+      "checkIn": "10月4日",
+      "checkOut": "10月5日",
+      "contact": "",
+      "address": "重庆市万州区北滨大道二段238号",
+      "description": "行政大床房"
+    },
+    "重庆住宿": {
+      "name": "重庆住宿",
+      "location": "重庆江北机场亚朵酒店",
+      "checkIn": "10月6日",
+      "checkOut": "10月7日",
+      "contact": "",
+      "address": "渝北区腾芳大道86号",
+      "description": "距离机场驾车15min"
+    },
+    "涪陵酒店": {
+      "name": "涪陵酒店",
+      "location": "涪陵慧谷湖科创酒店",
+      "checkIn": "10月5日",
+      "checkOut": "10月6日",
+      "contact": "02372778888",
+      "address": "重庆涪陵区义和街道红春村8组888号",
+      "description": "湖景大床房 双早"
+    }
+  },
+  "highlights": [
+    "🏔️ 奉节三峡之颠",
+    "🌟 万州烤鱼、万州格格"
+  ],
+  "notes": {
+    "travelReminders": "预约餐馆\n提前预约景点门票(防止满员)",
+    "emergencyContacts": []
+  },
+  "checklist": {
+    "items": [
+      {
+        "id": "doc_001",
+        "category": "documents",
+        "name": "身份证/护照",
+        "description": "确认证件有效期",
+        "required": true,
+        "confirmations": {}
+      },
+      {
+        "id": "elec_001",
+        "category": "electronics",
+        "name": "手机充电器",
+        "description": "原装充电器或快充线",
+        "required": true,
+        "confirmations": {}
+      },
+      {
+        "id": "elec_002",
+        "category": "electronics",
+        "name": "充电宝",
+        "description": "容量≥10000mAh",
+        "required": true,
+        "confirmations": {}
+      },
+      {
+        "id": "cloth_001",
+        "category": "clothing",
+        "name": "换洗衣物",
+        "description": "根据天气准备合适衣物",
+        "required": true,
+        "confirmations": {}
+      },
+      {
+        "id": "cloth_002",
+        "category": "clothing",
+        "name": "舒适运动鞋",
+        "description": "适合长时间步行",
+        "required": true,
+        "confirmations": {}
+      },
+      {
+        "id": "care_001",
+        "category": "personal_care",
+        "name": "洗漱用品",
+        "description": "牙刷、牙膏、洗发水等",
+        "required": true,
+        "confirmations": {}
+      },
+      {
+        "id": "care_002",
+        "category": "personal_care",
+        "name": "防晒用品",
+        "description": "防晒霜、太阳镜、帽子",
+        "required": false,
+        "confirmations": {}
+      },
+      {
+        "id": "med_001",
+        "category": "medicine",
+        "name": "常用药品",
+        "description": "感冒药、止泻药、创可贴",
+        "required": false,
+        "confirmations": {}
+      },
+      {
+        "id": "other_001",
+        "category": "other",
+        "name": "现金",
+        "description": "适量现金备用",
+        "required": false,
+        "confirmations": {}
+      },
+      {
+        "id": "other_002",
+        "category": "other",
+        "name": "雨伞",
+        "description": "便携折叠伞",
+        "required": false,
+        "confirmations": {}
+      }
+    ],
+    "categories": [
+      {
+        "id": "documents",
+        "name": "证件类",
+        "icon": "📄"
+      },
+      {
+        "id": "electronics",
+        "name": "电子设备",
+        "icon": "🔌"
+      },
+      {
+        "id": "clothing",
+        "name": "服装类",
+        "icon": "👕"
+      },
+      {
+        "id": "personal_care",
+        "name": "个人护理",
+        "icon": "🧴"
+      },
+      {
+        "id": "medicine",
+        "name": "药品",
+        "icon": "💊"
+      },
+      {
+        "id": "other",
+        "name": "其他",
+        "icon": "📦"
+      }
+    ]
+  },
+  "budget": {
+    "totalBudget": 20000,
+    "currency": "CNY",
+    "expenses": [
+      {
+        "id": "exp_001",
+        "title": "去程航班MF8304",
+        "amount": 1731,
+        "category": "transportation",
+        "relatedId": "去程航班",
+        "paidBy": "AA制",
+        "date": "2025-10-03",
+        "description": "深圳飞重庆\n小鸡毛857\n小白毛874",
+        "status": "completed"
+      },
+      {
+        "id": "exp_002",
+        "title": "回程航班HU7342",
+        "amount": 2269,
+        "category": "transportation",
+        "relatedId": "回程航班",
+        "paidBy": "AA制",
+        "date": "2024-10-07",
+        "description": "重庆飞广州\n小白毛1140\n小鸡毛1129",
+        "status": "completed"
+      },
+      {
+        "id": "exp_1758339661633",
+        "title": "去程高铁费用",
+        "amount": 336,
+        "category": "transportation",
+        "relatedId": null,
+        "paidBy": "小鸡毛",
+        "date": "2025-09-19",
+        "description": "",
+        "status": "completed"
+      },
+      {
+        "id": "exp_1758339701961",
+        "title": "租车",
+        "amount": 1099,
+        "category": "transportation",
+        "relatedId": "租车",
+        "paidBy": "小鸡毛",
+        "date": "2025-09-20",
+        "description": "",
+        "status": "completed"
+      },
+      {
+        "id": "exp_1758356469107",
+        "title": "奉节住宿",
+        "amount": 682,
+        "category": "accommodation",
+        "relatedId": "新住宿",
+        "paidBy": "小白毛",
+        "date": "2025-09-20",
+        "description": "",
+        "status": "completed"
+      },
+      {
+        "id": "exp_1758358942202",
+        "title": "万州住宿",
+        "amount": 593,
+        "category": "accommodation",
+        "relatedId": "万州住宿",
+        "paidBy": "小白毛",
+        "date": "2025-09-20",
+        "description": "",
+        "status": "completed"
+      },
+      {
+        "id": "exp_1758360209695",
+        "title": "白帝城-三峡之巅门票",
+        "amount": 280,
+        "category": "attractions",
+        "relatedId": null,
+        "paidBy": "小白毛",
+        "date": "2025-09-20",
+        "description": "去哪儿门票套票140一人",
+        "status": "planned"
+      },
+      {
+        "id": "exp_1758445764340",
+        "title": "重庆住宿",
+        "amount": 338,
+        "category": "accommodation",
+        "relatedId": "重庆住宿",
+        "paidBy": "小白毛",
+        "date": "2025-09-21",
+        "description": "",
+        "status": "completed"
+      },
+      {
+        "id": "exp_1758641642211",
+        "title": "涪陵酒店",
+        "amount": 598,
+        "category": "accommodation",
+        "relatedId": "涪陵酒店",
+        "paidBy": "小鸡毛",
+        "date": "2025-09-23",
+        "description": "",
+        "status": "planned"
+      }
+    ],
+    "categories": [
+      {
+        "id": "transportation",
+        "name": "交通",
+        "icon": "🚄",
+        "color": "#3498db"
+      },
+      {
+        "id": "accommodation",
+        "name": "住宿",
+        "icon": "🏨",
+        "color": "#e74c3c"
+      },
+      {
+        "id": "food",
+        "name": "餐饮",
+        "icon": "🍽️",
+        "color": "#f39c12"
+      },
+      {
+        "id": "attractions",
+        "name": "景点",
+        "icon": "🎫",
+        "color": "#9b59b6"
+      },
+      {
+        "id": "visa",
+        "name": "签证",
+        "icon": "📝",
+        "color": "#1abc9c"
+      },
+      {
+        "id": "shopping",
+        "name": "购物",
+        "icon": "🛍️",
+        "color": "#e67e22"
+      },
+      {
+        "id": "miscellaneous",
+        "name": "其他",
+        "icon": "💰",
+        "color": "#95a5a6"
+      }
+    ],
+    "summary": {
+      "totalSpent": 7048,
+      "totalPlanned": 7926,
+      "remaining": 12074,
+      "byCategory": {
+        "transportation": 5435,
+        "accommodation": 2211,
+        "food": 0,
+        "attractions": 280,
+        "visa": 0,
+        "shopping": 0,
+        "miscellaneous": 0
+      },
+      "byTraveler": {
+        "小鸡毛": 2033,
+        "小白毛": 1893,
+        "AA制": 4000
+      }
+    }
+  }
+}
