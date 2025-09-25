@@ -1749,16 +1749,16 @@ footer p {
     background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
     color: white;
     border: none;
-    border-radius: 20px;
-    padding: 8px 16px;
-    font-size: 12px;
-    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 18px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 6px rgba(116, 185, 255, 0.3);
     display: flex;
     align-items: center;
-    gap: 6px;
-    box-shadow: 0 2px 8px rgba(116, 185, 255, 0.3);
-    transition: all 0.3s ease;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
     white-space: nowrap;
     flex-shrink: 0;
     height: fit-content;
@@ -1776,11 +1776,11 @@ footer p {
 }
 
 .weather-toggle-btn.compact .weather-icon {
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .weather-toggle-btn.compact .weather-text {
-    font-size: 12px;
+    font-size: 11px;
 }
 
 .weather-loading {
@@ -2496,5 +2496,495 @@ footer p {
 
     .weather-toggle-btn.compact:active {
         transform: scale(0.95);
+    }
+}
+
+/* ============ 路线地图样式 ============ */
+
+/* 日期头部控制按钮组 */
+.day-controls {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* 路线按钮样式 */
+.routing-toggle-btn {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(46, 204, 113, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    height: fit-content;
+}
+
+.routing-toggle-btn.compact {
+    background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 1px 6px rgba(46, 204, 113, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+    height: fit-content;
+}
+
+.routing-toggle-btn:hover, .routing-toggle-btn.compact:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.4);
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+
+.routing-toggle-btn:active, .routing-toggle-btn.compact:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(46, 204, 113, 0.3);
+}
+
+.routing-icon {
+    font-size: 14px;
+}
+
+.routing-toggle-btn.compact .routing-icon {
+    font-size: 12px;
+}
+
+.routing-text {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.routing-toggle-btn.compact .routing-text {
+    font-size: 11px;
+}
+
+/* 路线信息容器样式 */
+.routing-info {
+    margin: 15px 0;
+    padding: 15px;
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    border-radius: 12px;
+    color: white;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.routing-info.routing-hidden {
+    background: linear-gradient(135deg, #ecf0f1 0%, #bdc3c7 100%);
+}
+
+.routing-loading {
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.routing-hide-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.routing-hide-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* 路线地图容器 */
+.routing-map-container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.route-info {
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.route-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.route-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.route-summary {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.map-container {
+    position: relative;
+    background: #f8f9fa;
+    border-radius: 0 0 8px 8px;
+}
+
+.map-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: #666;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.map-placeholder p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.open-external-map-btn {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
+}
+
+.open-external-map-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+}
+
+.routing-error {
+    background: rgba(231, 76, 60, 0.8);
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.retry-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.retry-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 管理页面路线设置样式 */
+.routing-controls {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.routing-toggle-section h3 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+    font-size: 18px;
+}
+
+.routing-toggle-section .form-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.info-btn {
+    background: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.routing-settings {
+    margin-top: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.setting-description {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.routing-input-group {
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+}
+
+.routing-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.routing-day-header h4 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 16px;
+    flex: 1;
+}
+
+.day-location {
+    color: #6c757d;
+    font-size: 14px;
+    margin-right: 15px;
+}
+
+/* 路线地点管理 */
+.routing-points-container {
+    margin-top: 15px;
+}
+
+.points-list {
+    margin-bottom: 15px;
+}
+
+.routing-point-item {
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+    background: white;
+}
+
+.point-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.point-number {
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.point-type {
+    font-weight: 500;
+    color: #495057;
+    font-size: 14px;
+}
+
+.remove-point-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: auto;
+}
+
+.remove-point-btn:hover {
+    background: #c82333;
+}
+
+.point-inputs-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+}
+
+.add-point-section {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.routing-inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.routing-inputs-row .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.routing-inputs-row label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #495057;
+    font-size: 14px;
+}
+
+.routing-inputs-row input {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.routing-inputs-row input:focus {
+    outline: none;
+    border-color: #27ae60;
+    box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2);
+}
+
+.routing-preview {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #e7f3ff;
+    border: 1px solid #b8daff;
+    border-radius: 4px;
+}
+
+.route-preview-text {
+    color: #004085;
+    font-style: italic;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .routing-inputs-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    /* 移动端地点输入布局优化 */
+    .point-inputs-row {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .point-inputs-row .form-group {
+        width: 100%;
+    }
+
+    .routing-day-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .routing-day-header .checkbox-label {
+        margin-top: 8px;
+    }
+
+    /* 移动端表单优化 */
+    .routing-inputs-row input,
+    .point-inputs-row input {
+        font-size: 16px; /* 防止iOS缩放 */
+        padding: 10px 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .routing-point-item {
+        padding: 15px 12px;
+    }
+
+    .point-header {
+        margin-bottom: 12px;
+        padding-bottom: 10px;
+    }
+
+    .day-controls {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-end;
+    }
+
+    /* 移动端按钮保持和桌面端一致 */
+    .routing-toggle-btn.compact,
+    .weather-toggle-btn.compact {
+        padding: 6px 12px;
+        font-size: 11px;
+        border-radius: 18px;
+    }
+
+    .routing-toggle-btn.compact .routing-icon,
+    .weather-toggle-btn.compact .weather-icon {
+        font-size: 12px;
+    }
+
+    .routing-toggle-btn.compact .routing-text,
+    .weather-toggle-btn.compact .weather-text {
+        font-size: 11px;
+    }
+
+    .map-container {
+        height: 300px !important;
     }
 }

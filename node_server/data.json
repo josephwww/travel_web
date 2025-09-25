@@ -500,5 +500,96 @@
         "AA制": 4000
       }
     }
+  },
+  "routingSettings": {
+    "day1": {
+      "enabled": true,
+      "points": [
+        {
+          "keyword": "奉节站",
+          "city": "奉节"
+        },
+        {
+          "keyword": "奉节诗城皇廷大酒店",
+          "city": "奉节"
+        },
+        {
+          "keyword": "双姐老火锅",
+          "city": "奉节"
+        }
+      ]
+    },
+    "day2": {
+      "enabled": true,
+      "points": [
+        {
+          "keyword": "三侠之颠蓝月河停车场",
+          "city": "奉节"
+        },
+        {
+          "keyword": "宝塔坪",
+          "city": "奉节"
+        },
+        {
+          "keyword": "天生城",
+          "city": "万州"
+        },
+        {
+          "keyword": "万州万达北滨大道亚朵酒店",
+          "city": "万州"
+        }
+      ]
+    },
+    "day3": {
+      "enabled": false,
+      "points": [
+        {
+          "keyword": "万州万达北滨大道亚朵酒店",
+          "city": "万州"
+        },
+        {
+          "keyword": "万州大瀑布",
+          "city": "万州"
+        },
+        {
+          "keyword": "涪陵慧谷湖科创酒店",
+          "city": "涪陵"
+        }
+      ]
+    },
+    "day4": {
+      "enabled": false,
+      "points": [
+        {
+          "keyword": "涪陵慧谷湖科创酒店",
+          "city": "涪陵"
+        },
+        {
+          "keyword": "816工程",
+          "city": "涪陵"
+        },
+        {
+          "keyword": "武陵山大裂谷",
+          "city": "涪陵"
+        },
+        {
+          "keyword": "重庆江北机场亚朵酒店",
+          "city": "重庆"
+        }
+      ]
+    },
+    "day5": {
+      "enabled": false,
+      "points": [
+        {
+          "keyword": "重庆江北机场亚朵酒店",
+          "city": "重庆"
+        },
+        {
+          "keyword": "重庆江北机场",
+          "city": "重庆"
+        }
+      ]
+    }
   }
 }

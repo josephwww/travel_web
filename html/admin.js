@@ -784,6 +784,8 @@ document.addEventListener('DOMContentLoaded', async function() {
         loadChecklistData();
         // 初始化预算管理
         initializeBudgetManagement();
+        // 加载路线设置
+        loadRoutingSettings();
     }
     
     document.addEventListener('keypress', function(e) {
@@ -1765,4 +1767,242 @@ function loadConfirmationOverview() {
 function saveChecklist() {
     saveTravelData(travelData);
     showNotification('必备清单已保存', 'success');
+}
+
+// ============ 路线地图管理功能 ============
+
+function loadRoutingInputs() {
+    const container = document.getElementById('routing-inputs');
+    if (!container || !travelData.itinerary) return;
+
+    container.innerHTML = '';
+
+    Object.keys(travelData.itinerary).forEach(dayKey => {
+        const dayData = travelData.itinerary[dayKey];
+        const routingData = travelData.routingSettings?.[dayKey] || {
+            enabled: false,
+            points: []
+        };
+
+        const routingInputDiv = document.createElement('div');
+        routingInputDiv.className = 'routing-input-group';
+        routingInputDiv.innerHTML = `
+            <div class="routing-day-header">
+                <h4>${dayData.date}</h4>
+                <span class="day-location">${dayData.location}</span>
+                <label class="checkbox-label">
+                    <input type="checkbox"
+                           id="enable-routing-${dayKey}"
+                           ${routingData.enabled ? 'checked' : ''}
+                           onchange="toggleDayRouting('${dayKey}')">
+                    <span>启用当日路线</span>
+                </label>
+            </div>
+            <div class="routing-points-container" id="routing-points-${dayKey}"
+                 style="display: ${routingData.enabled ? 'block' : 'none'}">
+                <div class="points-list" id="points-list-${dayKey}">
+                    <!-- 动态加载地点列表 -->
+                </div>
+                <div class="add-point-section">
+                    <button class="add-btn" onclick="addRoutingPoint('${dayKey}')" type="button">
+                        + 添加地点
+                    </button>
+                </div>
+                <div class="routing-preview">
+                    <strong>路线预览：</strong>
+                    <span class="route-preview-text" id="route-preview-${dayKey}">
+                        <!-- 动态更新路线预览 -->
+                    </span>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(routingInputDiv);
+        loadRoutingPoints(dayKey);
+        updateRoutePreview(dayKey);
+    });
+}
+
+function toggleDayRouting(dayKey) {
+    const checkbox = document.getElementById(`enable-routing-${dayKey}`);
+    const pointsContainer = document.getElementById(`routing-points-${dayKey}`);
+
+    if (!checkbox || !pointsContainer) return;
+
+    // 初始化路线设置数据结构
+    if (!travelData.routingSettings) {
+        travelData.routingSettings = {};
+    }
+
+    if (!travelData.routingSettings[dayKey]) {
+        travelData.routingSettings[dayKey] = {
+            enabled: false,
+            points: []
+        };
+    }
+
+    const enabled = checkbox.checked;
+    travelData.routingSettings[dayKey].enabled = enabled;
+    pointsContainer.style.display = enabled ? 'block' : 'none';
+
+    // 如果启用但没有地点，添加两个默认地点
+    if (enabled && travelData.routingSettings[dayKey].points.length === 0) {
+        travelData.routingSettings[dayKey].points = [
+            { keyword: '', city: '' },
+            { keyword: '', city: '' }
+        ];
+        loadRoutingPoints(dayKey);
+    }
+
+    saveTravelData(travelData);
+}
+
+function loadRoutingPoints(dayKey) {
+    const container = document.getElementById(`points-list-${dayKey}`);
+    const routingData = travelData.routingSettings?.[dayKey];
+
+    if (!container || !routingData) return;
+
+    container.innerHTML = '';
+
+    routingData.points.forEach((point, index) => {
+        const pointDiv = document.createElement('div');
+        pointDiv.className = 'routing-point-item';
+        pointDiv.innerHTML = `
+            <div class="point-header">
+                <span class="point-number">${index + 1}</span>
+                <span class="point-type">${index === 0 ? '起点' : index === routingData.points.length - 1 ? '终点' : '途经点'}</span>
+                <button class="remove-point-btn" onclick="removeRoutingPoint('${dayKey}', ${index})"
+                        ${routingData.points.length <= 2 ? 'style="display:none"' : ''}>
+                    删除
+                </button>
+            </div>
+            <div class="point-inputs-row">
+                <div class="form-group">
+                    <label>地点名称:</label>
+                    <input type="text"
+                           value="${point.keyword || ''}"
+                           placeholder="如: 翡翠海岸、三峡之巅"
+                           onchange="updateRoutingPoint('${dayKey}', ${index}, 'keyword', this.value)">
+                </div>
+                <div class="form-group">
+                    <label>所在城市:</label>
+                    <input type="text"
+                           value="${point.city || ''}"
+                           placeholder="如: 深圳、奉节"
+                           onchange="updateRoutingPoint('${dayKey}', ${index}, 'city', this.value)">
+                </div>
+            </div>
+        `;
+
+        container.appendChild(pointDiv);
+    });
+}
+
+function addRoutingPoint(dayKey) {
+    if (!travelData.routingSettings) {
+        travelData.routingSettings = {};
+    }
+
+    if (!travelData.routingSettings[dayKey]) {
+        travelData.routingSettings[dayKey] = {
+            enabled: false,
+            points: []
+        };
+    }
+
+    // 检查地点数量限制（高德地图最多支持16个地点）
+    if (travelData.routingSettings[dayKey].points.length >= 16) {
+        showNotification('地点数量已达到上限（16个），无法继续添加', 'error');
+        return;
+    }
+
+    // 添加新地点
+    travelData.routingSettings[dayKey].points.push({
+        keyword: '',
+        city: ''
+    });
+
+    loadRoutingPoints(dayKey);
+    updateRoutePreview(dayKey);
+    saveTravelData(travelData);
+}
+
+function removeRoutingPoint(dayKey, pointIndex) {
+    const routingData = travelData.routingSettings?.[dayKey];
+    if (!routingData || routingData.points.length <= 2) {
+        showNotification('至少需要保留2个地点（起点和终点）', 'error');
+        return;
+    }
+
+    routingData.points.splice(pointIndex, 1);
+    loadRoutingPoints(dayKey);
+    updateRoutePreview(dayKey);
+    saveTravelData(travelData);
+}
+
+function updateRoutingPoint(dayKey, pointIndex, field, value) {
+    const routingData = travelData.routingSettings?.[dayKey];
+    if (!routingData || !routingData.points[pointIndex]) return;
+
+    routingData.points[pointIndex][field] = value.trim();
+    updateRoutePreview(dayKey);
+    saveTravelData(travelData);
+}
+
+function updateRoutePreview(dayKey) {
+    const routingData = travelData.routingSettings?.[dayKey];
+    const previewElement = document.getElementById(`route-preview-${dayKey}`);
+
+    if (!routingData || !previewElement) return;
+
+    const validPoints = routingData.points.filter(point => point.keyword && point.city);
+
+    if (validPoints.length === 0) {
+        previewElement.textContent = '请添加地点';
+        return;
+    }
+
+    const routeText = validPoints
+        .map(point => `${point.keyword}(${point.city})`)
+        .join(' → ');
+
+    previewElement.textContent = routeText;
+}
+
+function showRoutingHelp() {
+    alert(`路线地图功能说明：
+
+🗺️ 多地点路线规划功能
+
+1. 每日独立设置：
+   - 每天可以单独启用或禁用路线地图
+   - 勾选"启用当日路线"即可开启
+
+2. 多地点路线：
+   - 每天可以设置多个地点（2-16个）
+   - 地点按顺序连接：第一个为起点，最后一个为终点
+   - 中间的地点为途经点
+   - 最少需要2个地点（起点和终点）
+   - ⚠️ 最多支持16个地点（高德地图API限制）
+
+3. 地点输入：
+   - 地点名称：输入具体位置，如"翡翠海岸"、"三峡之巅"
+   - 所在城市：输入城市名称，如"深圳"、"奉节"
+
+4. 展示效果：
+   - 在主页面对应日期显示"路线"按钮
+   - 点击可查看完整的多点驾驶路线
+
+5. 故障排除：
+   - 如果路线无法显示，请检查地点名称是否准确
+   - 某些偏僻地点可能无法被识别
+   - 超过16个地点时，系统会自动使用前16个
+
+💡 提示：地点名称越准确，路线规划越精确！`);
+}
+
+function loadRoutingSettings() {
+    // 总是加载路线输入框
+    loadRoutingInputs();
 }

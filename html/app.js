@@ -99,6 +99,24 @@ function createDayCard(day, transportations, accommodations, dayKey) {
         </div>`;
     }
 
+    // 路线地图按钮和容器
+    let routingButton = '';
+    let routingInfo = '';
+    const dayRoutingSettings = travelData.routingSettings?.[dayKey];
+    if (dayRoutingSettings?.enabled && dayRoutingSettings.points?.length >= 2) {
+        const validPoints = dayRoutingSettings.points.filter(point => point.keyword && point.city);
+        if (validPoints.length >= 2) {
+            routingButton = `<button class="routing-toggle-btn compact" onclick="toggleRoutingForDay('${dayKey}')">
+                <span class="routing-icon">🗺️</span>
+                <span class="routing-text">路线</span>
+            </button>`;
+
+            routingInfo = `<div class="routing-info routing-hidden" id="routing-${dayKey}" style="display: none;">
+                <div class="routing-loading">🗺️ 正在加载路线地图...</div>
+            </div>`;
+        }
+    }
+
     let accommodationInfo = '';
 
     if (accommodations) {
@@ -130,9 +148,13 @@ function createDayCard(day, transportations, accommodations, dayKey) {
                 <div class="date">${day.date}</div>
                 <div class="location">${day.location}</div>
             </div>
-            ${weatherButton}
+            <div class="day-controls">
+                ${weatherButton}
+                ${routingButton}
+            </div>
         </div>
         ${weatherInfo}
+        ${routingInfo}
         ${transportInfo}
         <div class="activities">
             ${activities}
@@ -860,4 +882,283 @@ function getWindIcon(windpower) {
     } else {
         return '🌪️';
     }
+}
+
+// ============ 路线地图功能 ============
+
+function toggleRoutingForDay(dayKey) {
+    const container = document.getElementById(`routing-${dayKey}`);
+    if (!container) return;
+
+    if (container.style.display === 'none') {
+        // 显示路线地图
+        container.style.display = 'block';
+        container.classList.remove('routing-hidden');
+        container.innerHTML = '<div class="routing-loading">🗺️ 正在加载路线地图...</div>';
+        loadRoutingMap(dayKey);
+
+        // 添加隐藏按钮
+        setTimeout(() => {
+            const routingContainer = document.getElementById(`routing-${dayKey}`);
+            if (routingContainer && !routingContainer.querySelector('.routing-hide-btn')) {
+                const hideBtn = document.createElement('button');
+                hideBtn.className = 'routing-hide-btn';
+                hideBtn.onclick = () => hideRoutingForDay(dayKey);
+                hideBtn.innerHTML = '✕';
+                hideBtn.title = '隐藏路线地图';
+                routingContainer.appendChild(hideBtn);
+            }
+        }, 1000);
+    }
+}
+
+function hideRoutingForDay(dayKey) {
+    const container = document.getElementById(`routing-${dayKey}`);
+    if (!container) return;
+
+    container.style.display = 'none';
+    container.classList.add('routing-hidden');
+    container.innerHTML = '<div class="routing-loading">🗺️ 正在加载路线地图...</div>';
+}
+
+function loadRoutingMap(dayKey) {
+    const dayRoutingSettings = travelData.routingSettings?.[dayKey];
+    if (!dayRoutingSettings?.enabled || !dayRoutingSettings.points) {
+        return;
+    }
+
+    const container = document.getElementById(`routing-${dayKey}`);
+    const validPoints = dayRoutingSettings.points.filter(point => point.keyword && point.city);
+
+    if (!container || validPoints.length < 2) {
+        return;
+    }
+
+    try {
+        // 创建地图容器ID
+        const mapContainerId = `map-${dayKey}`;
+
+        // 构建路线摘要
+        const routeSummary = validPoints.length === 2
+            ? `${validPoints[0].keyword} → ${validPoints[validPoints.length - 1].keyword}`
+            : `${validPoints[0].keyword} → ... → ${validPoints[validPoints.length - 1].keyword}`;
+
+        const pointsCount = validPoints.length;
+        const pointsCountText = pointsCount > 16
+            ? `${pointsCount}个地点（显示前16个）`
+            : `${pointsCount}个地点`;
+
+        // 构建地点列表
+        const pointsList = validPoints.map((point, index) => {
+            const pointType = index === 0 ? '起点' : index === validPoints.length - 1 ? '终点' : `途经点${index}`;
+            return `<p>${pointType}: ${point.keyword} (${point.city})</p>`;
+        }).join('');
+
+        // 构建路线信息HTML
+        const routingHtml = `
+            <div class="routing-map-container">
+                <div class="route-info">
+                    <div class="route-header">
+                        <h4>🚗 驾车路线 (${pointsCountText})</h4>
+                        <span class="route-summary">${routeSummary}</span>
+                    </div>
+                </div>
+                <div class="map-container" id="${mapContainerId}" style="width: 100%; height: 400px;">
+                    <div class="map-placeholder">
+                        <p>🗺️ 多地点路线地图区域</p>
+                        ${pointsList}
+                        <button class="open-external-map-btn" onclick="openExternalMapMultiPoints('${dayKey}')">
+                            🗺️ 在高德地图中查看路线
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        container.innerHTML = routingHtml;
+
+        // 如果AMap已加载，尝试初始化真正的地图
+        if (typeof AMap !== 'undefined') {
+            initializeAMapRouting(mapContainerId, validPoints);
+        }
+
+    } catch (error) {
+        console.error('加载路线地图失败:', error);
+        container.innerHTML = `
+            <div class="routing-error">
+                🗺️ 路线地图加载失败
+                <button class="retry-btn" onclick="loadRoutingMap('${dayKey}')">重试</button>
+            </div>
+        `;
+    }
+}
+
+function initializeAMapRouting(mapContainerId, points) {
+    try {
+        // 创建地图实例
+        const map = new AMap.Map(mapContainerId, {
+            viewMode: "2D",
+            zoom: 10,
+            center: [114.0596, 22.5429], // 默认中心点
+            resizeEnable: true,
+        });
+
+        // 使用AMap路线规划
+        AMap.plugin("AMap.Driving", function () {
+            const driving = new AMap.Driving({
+                policy: 0, // 速度优先策略
+                map: map,
+            });
+
+            // 直接使用传入的points数组，这正是AMap.Driving需要的格式
+            if (points && points.length >= 2) {
+                console.log('使用多地点路线规划:', points);
+                console.log(`地点数量: ${points.length}个`);
+
+                // 高德地图最多支持16个点（起点+终点+最多14个途经点）
+                if (points.length > 16) {
+                    console.warn(`地点数量超过限制(${points.length} > 16)，将使用前16个地点`);
+                    points = points.slice(0, 16);
+                }
+
+                // 设置路线规划的回调
+                driving.search(points, function(status, result) {
+                    if (status === 'complete') {
+                        console.log('路线规划成功:', result);
+                    } else {
+                        console.error('路线规划失败:', status, result);
+                        // 如果路线规划失败，显示错误信息
+                        const container = document.getElementById(mapContainerId);
+                        if (container) {
+                            const pointsList = points.map((point, index) => {
+                                const pointType = index === 0 ? '起点' : index === points.length - 1 ? '终点' : `途经点${index}`;
+                                return `<p>${pointType}: ${point.keyword} (${point.city})</p>`;
+                            }).join('');
+
+                            container.innerHTML = `
+                                <div class="map-placeholder">
+                                    <p>🗺️ 路线规划失败</p>
+                                    <p style="color: #e74c3c; font-size: 12px;">错误: ${result?.info || status}</p>
+                                    ${pointsList}
+                                    <button class="open-external-map-btn" onclick="openExternalMapFromPoints('${JSON.stringify(points).replace(/"/g, '&quot;')}')">
+                                        🗺️ 在高德地图中查看路线
+                                    </button>
+                                </div>
+                            `;
+                        }
+                    }
+                });
+            }
+        });
+
+    } catch (error) {
+        console.error('初始化高德地图路线失败:', error);
+        // 如果高德地图初始化失败，回退到占位符
+        const container = document.getElementById(mapContainerId);
+        if (container) {
+            const pointsList = points.map((point, index) => {
+                const pointType = index === 0 ? '起点' : index === points.length - 1 ? '终点' : `途经点${index}`;
+                return `<p>${pointType}: ${point.keyword} (${point.city})</p>`;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="map-placeholder">
+                    <p>🗺️ 地图服务暂不可用</p>
+                    ${pointsList}
+                    <button class="open-external-map-btn" onclick="openExternalMapFromPoints('${JSON.stringify(points).replace(/"/g, '&quot;')}')">
+                        🗺️ 在高德地图中查看路线
+                    </button>
+                </div>
+            `;
+        }
+    }
+}
+
+function openExternalMap(startPoint, startCity, endPoint, endCity) {
+    const startQuery = encodeURIComponent(`${startPoint} ${startCity}`);
+    const endQuery = encodeURIComponent(`${endPoint} ${endCity}`);
+
+    const ua = navigator.userAgent.toLowerCase();
+    let url;
+
+    if (/iphone|ipad|ipod/.test(ua)) {
+        // iOS 高德地图
+        url = `iosamap://path?sourceApplication=myH5&slat=&slon=&sname=${startQuery}&dlat=&dlon=&dname=${endQuery}&dev=0&t=0`;
+    } else if (/android/.test(ua)) {
+        // Android 高德地图
+        url = `androidamap://route?sourceApplication=myH5&slat=&slon=&sname=${startQuery}&dlat=&dlon=&dname=${endQuery}&dev=0&t=0`;
+    } else {
+        // 桌面端，使用网页版
+        url = `https://ditu.amap.com/dir?from=${startQuery}&to=${endQuery}`;
+    }
+
+    // 尝试打开App
+    if (/iphone|ipad|ipod|android/.test(ua)) {
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = url;
+        document.body.appendChild(iframe);
+
+        // 2秒后回退到网页版
+        setTimeout(() => {
+            document.body.removeChild(iframe);
+            window.open(`https://ditu.amap.com/dir?from=${startQuery}&to=${endQuery}`, '_blank');
+        }, 2000);
+    } else {
+        window.open(url, '_blank');
+    }
+}
+
+function openExternalMapMultiPoints(dayKey) {
+    const dayRoutingSettings = travelData.routingSettings?.[dayKey];
+    if (!dayRoutingSettings?.points) return;
+
+    const validPoints = dayRoutingSettings.points.filter(point => point.keyword && point.city);
+    if (validPoints.length < 2) return;
+
+    // 对于多地点路线，使用起点到终点的简化路线
+    const startPoint = validPoints[0];
+    const endPoint = validPoints[validPoints.length - 1];
+
+    openExternalMap(startPoint.keyword, startPoint.city, endPoint.keyword, endPoint.city);
+}
+
+function openExternalMapFromPoints(pointsJsonString) {
+    try {
+        const points = JSON.parse(pointsJsonString.replace(/&quot;/g, '"'));
+        if (points.length >= 2) {
+            const startPoint = points[0];
+            const endPoint = points[points.length - 1];
+            openExternalMap(startPoint.keyword, startPoint.city, endPoint.keyword, endPoint.city);
+        }
+    } catch (error) {
+        console.error('解析地点数据失败:', error);
+    }
+}
+
+// 动态加载高德地图API（如果需要）
+function loadAmapScript() {
+    if (typeof AMap !== 'undefined') {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        // 检查是否已经存在script标签
+        if (document.querySelector('script[src*="webapi.amap.com"]')) {
+            resolve();
+            return;
+        }
+
+        // 添加安全配置
+        window._AMapSecurityConfig = {
+            securityJsCode: "b606565e572165ec004b3795ad79998e",
+        };
+
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'https://webapi.amap.com/maps?v=2.0&key=4cddce47663344353f6e349d715070a7';
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+    });
 }
